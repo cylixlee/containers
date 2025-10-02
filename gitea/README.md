@@ -1,9 +1,14 @@
 # Gitea and Gitea Actions
 
+![Tested on Podman](https://shields.io/badge/Tested-on_Podman/Windows11_(WSL2)-green)
+
 This folder holds configuration for Gitea and Gitea Actions.
 
 - [Gitea and Gitea Actions](#gitea-and-gitea-actions)
   - [Prerequisites](#prerequisites)
+  - [Composing up](#composing-up)
+    - [with Podman](#with-podman)
+    - [with other OCI engine (like Docker)](#with-other-oci-engine-like-docker)
 
 
 [Gitea](https://gitea.com) is an open source self-hosted Git service written in Go, while [Gitea Actions](https://docs.gitea.com/usage/actions/overview) are the built-in CI/CD platform for Gitea.
@@ -30,7 +35,8 @@ You'll need an OCI container engine which supports OCI compose specification (e.
 > Specifically, in this project, the `/var/run/docker.sock` must be mounted into the `gitea-runner` container, which utilizes OCI container engine to run CI/CD jobs.
 
 ## Composing up
-This project comes with a handwritten `Makefile`. You can setup Gitea and Gitea Actions step by step:
+### with Podman
+This project comes with a handwritten `Makefile` for Podman users. You can setup Gitea and Gitea Actions step by step:
 
 1. **Start Gitea server**
    
@@ -38,8 +44,19 @@ This project comes with a handwritten `Makefile`. You can setup Gitea and Gitea 
 
    After that, go to *Site Administration* > *Actions* > *Runners* > *Create new Runner* and you should see a registration token. Copy the token for the next step.
 
-2. **Start Gitea runner**
+2. **Start Gitea Actions runner**
    
-   Run `make runner REGISTRATION_TOKEN="<Your registration token>"` with the registration token you copied. This should pull up the Gitea Actions engine automatically.
+   Run `make runner REGISTRATION_TOKEN="<Your registration token>"` with the registration token you copied. This should pull up the Gitea Actions runner automatically.
 
 Done! If something goes wrong, you can check the logs and clean up all the containers and resources with `make rm` and start again.
+
+### with other OCI engine (like Docker)
+It's okay if you're using other OCI containers and it *should* (but not guaranteed to) work. Let's take Docker for example:
+
+1. **Start Gitea server**
+   
+   Run `docker compose up -d gitea-server`, then go to `https://localhost:3000` for graphical first-time installation. You'll need to copy the registration token at *Site Administration* > *Actions* > *Runners* > *Create new Runner*.
+
+2. **Start Gitea Actions runner**
+   
+   Set the environment variable `REGISTRATION_TOKEN` to the token you copied in step 1, and run `docker compose up -d gitea-runner`.
