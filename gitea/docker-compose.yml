@@ -1,0 +1,47 @@
+# Gitea (with Actions) OCI compose. This is intended to setup Gitea with its Gitea Actions in OCI containers.
+#
+# Tested on Podman / Windows (WSL2).
+
+name: gitea
+
+networks:
+  gitea-network:
+    name: gitea-network
+    external: false
+
+volumes:
+  gitea-volume:
+    name: gitea-volume
+  gitea-runner-volume:
+    name: gitea-runner-volume
+
+services:
+  gitea-server:
+    container_name: gitea-server
+    image: docker.gitea.com/gitea:1.24.6
+    restart: always
+    environment:
+      - USER_UID=1001
+      - USER_GID=1001
+    networks:
+      - gitea-network
+    volumes:
+      - gitea-volume:/data
+    ports:
+      - "3000:3000"
+      - "2222:22"
+
+  gitea-runner:
+    container_name: gitea-runner
+    image: docker.io/gitea/act_runner:0.2.13
+    restart: always
+    depends_on:
+      - gitea-server
+    environment:
+      GITEA_INSTANCE_URL: "http://gitea-server:3000"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${REGISTRATION_TOKEN}"
+      GITEA_RUNNER_NAME: "gitea-runner"
+      GITEA_RUNNER_LABELS: "ubuntu-latest:docker://docker.gitea.com/runner-images:ubuntu-latest"
+    volumes:
+      - gitea-runner-volume:/data
+      - /var/run/docker.sock:/var/run/docker.sock
