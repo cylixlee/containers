@@ -3,6 +3,7 @@
 version: "3"
 
 tasks:
+  # To make podman services restart when the host machine restart, use `systemctl enable podman-restart.service.`
   serve:
     desc: Compose up Gitea server
     dir: "{{.TASKFILE_DIR}}"
