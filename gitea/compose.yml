@@ -39,6 +39,8 @@ services:
     container_name: gitea-runner
     image: docker.io/gitea/act_runner:0.2.13
     restart: always
+    networks:
+      - gitea-network
     depends_on:
       - gitea-server
     environment:
