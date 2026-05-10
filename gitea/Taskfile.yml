@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  serve:
+    desc: Compose up Gitea server
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - podman compose up -d gitea-server 2> /dev/null
+    silent: true
+
+  # The Gitea Action Runner.
+  #
+  # If you're using Podman on Windows (WSL2), you should use `podman machine ssh` to enter the linux environment, and
+  # exec this. Windows does not share docker socket with POSIX systems.
+  action:
+    desc: Compose up Gitea Action Runner
+    dir: "{{.TASKFILE_DIR}}"
+    preconditions:
+      - '[ "{{OS}}" != "windows" ]'
+    requires:
+      vars:
+        - REGISTRATION_TOKEN
+    cmds:
+      - REGISTRATION_TOKEN="{{.REGISTRATION_TOKEN}}" podman compose up -d gitea-runner 2> /dev/null
+    silent: true
+
+  down:
+    desc: Compose down Gitea containers
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - podman compose down 2> /dev/null
+    silent: true
+
+  clean:
+    desc: Remove containers and volumes
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - podman compose down -v 2> /dev/null
+    silent: true
