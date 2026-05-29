@@ -16,7 +16,7 @@ volumes:
     name: gitea-runner-volume
 
 services:
-  # To make podman services restart when the host machine restart, use `systemctl enable podman-restart.service.`
+  # To make podman services restart when the host machine restart, use `systemctl enable podman-restart.service`.
   gitea-server:
     container_name: gitea-server
     image: docker.gitea.com/gitea:1.24.6
