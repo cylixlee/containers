@@ -1,5 +1,9 @@
 # Gitea and Gitea Actions
 
+> [!IMPORTANT]
+>
+> I personally don't use this container anymore. [Forgejo](https://forgejo.org) is a fully open source and free/libre fork of Gitea and I use forgejo instead.
+
 ![Tested on Podman](https://shields.io/badge/Tested-on_Podman/Windows11_(WSL2)-green)
 
 This folder holds configuration for Gitea and Gitea Actions.

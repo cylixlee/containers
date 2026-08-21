@@ -3,6 +3,15 @@
 version: "3"
 
 includes:
-  gitea:
-    taskfile: ./gitea
+  forgejo:
+    taskfile: ./forgejo
     optional: true
+
+  # ===========================================================
+  # Deprecated
+  #   Use the fully open source fork forgejo container instead.
+  # ===========================================================
+
+  # gitea:
+  #   taskfile: ./gitea
+  #   optional: true

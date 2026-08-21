@@ -1,0 +1,16 @@
+name: forgejo
+
+services:
+  forgejo-service:
+    container_name: forgejo-service
+    image: codeberg.org/forgejo/forgejo:16.0.3
+    restart: always
+    volumes:
+      - forgejo-volume:/data
+    ports:
+      - "3000:3000"
+      - "2222:22"
+
+volumes:
+  forgejo-volume:
+    name: forgejo-volume
