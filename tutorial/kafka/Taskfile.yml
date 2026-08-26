@@ -3,7 +3,7 @@
 version: "3"
 
 vars:
-  CONTAINER_ENGINE:
+  ENGINE:
     sh: |
       if command -v podman > /dev/null; then
         echo -n "podman"
@@ -16,29 +16,29 @@ tasks:
     desc: Start Kafka broker container
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.CONTAINER_ENGINE}} compose up -d"
+      - "{{.ENGINE}} compose up -d"
     silent: true
 
   down:
     desc: Shutdown Kafka broker container
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.CONTAINER_ENGINE}} compose down > /dev/null"
+      - "{{.ENGINE}} compose down > /dev/null"
     silent: true
 
   shell:
     desc: Open kafka broker shell
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.CONTAINER_ENGINE}} exec --workdir /opt/kafka/bin/ -it tutorial-kafka sh"
+      - "{{.ENGINE}} exec --workdir /opt/kafka/bin/ -it tutorial-kafka sh"
     silent: true
     interactive: true

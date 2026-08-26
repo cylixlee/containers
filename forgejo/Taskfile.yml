@@ -16,7 +16,7 @@ tasks:
     desc: Compose up forgejo containers
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
       - "{{.ENGINE}} compose up -d"
@@ -26,7 +26,7 @@ tasks:
     desc: Compose down forgejo containers
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
       - "{{.ENGINE}} compose down 2> /dev/null"
@@ -36,7 +36,7 @@ tasks:
     desc: Remove containers and volumes
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
-      - sh: test -n "{{.CONTAINER_ENGINE}}"
+      - sh: test -n "{{.ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
       - "{{.ENGINE}} compose down -v 2> /dev/null"
