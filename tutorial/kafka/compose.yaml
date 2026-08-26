@@ -1,0 +1,6 @@
+services:
+  kafka:
+    container_name: tutorial-kafka
+    image: apache/kafka:latest
+    volumes:
+      - ../../data/tutorial/kafka:/var/lib/kafka/data

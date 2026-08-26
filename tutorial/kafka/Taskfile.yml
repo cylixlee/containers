@@ -3,7 +3,7 @@
 version: "3"
 
 vars:
-  ENGINE:
+  CONTAINER_ENGINE:
     sh: |
       if command -v podman > /dev/null; then
         echo -n "podman"
@@ -13,31 +13,32 @@ vars:
 
 tasks:
   up:
-    desc: Compose up forgejo containers
+    desc: Start Kafka broker container
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
       - sh: test -n "{{.CONTAINER_ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.ENGINE}} compose up -d"
+      - "{{.CONTAINER_ENGINE}} compose up -d"
     silent: true
 
   down:
-    desc: Compose down forgejo containers
+    desc: Shutdown Kafka broker container
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
       - sh: test -n "{{.CONTAINER_ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.ENGINE}} compose down 2> /dev/null"
+      - "{{.CONTAINER_ENGINE}} compose down > /dev/null"
     silent: true
 
-  clean:
-    desc: Remove containers and volumes
+  shell:
+    desc: Open kafka broker shell
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
       - sh: test -n "{{.CONTAINER_ENGINE}}"
         msg: Podman or Docker needed.
     cmds:
-      - "{{.ENGINE}} compose down -v 2> /dev/null"
+      - "{{.CONTAINER_ENGINE}} exec --workdir /opt/kafka/bin/ -it tutorial-kafka sh"
     silent: true
+    interactive: true
